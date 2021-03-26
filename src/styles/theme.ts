@@ -1,6 +1,39 @@
 import { createMuiTheme } from "@material-ui/core/styles";
 
-// Create a theme instance.
+declare module "@material-ui/core/styles/createPalette" {
+  interface Palette {
+    surface: {
+      white: string;
+      semiWhite: string;
+      black: string;
+      lightGrey: string;
+    };
+  }
+  interface PaletteOptions {
+    surface?: {
+      white: string;
+      semiWhite: string;
+      black: string;
+      lightGrey: string;
+    };
+  }
+}
+
+declare module "@material-ui/core/styles/createTypography" {
+  interface TypographyOptions {
+    bodyXSmall: TypographyStyle;
+  }
+  interface TypographyOptions {
+    bodyXXSmall: TypographyStyle;
+  }
+  interface Typography {
+    bodyXSmall: TypographyOptions;
+  }
+  interface Typography {
+    bodyXXSmall: TypographyOptions;
+  }
+}
+
 const theme = createMuiTheme({
   palette: {
     primary: {
@@ -20,7 +53,7 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: ["Poppins, sans-serif"].join(","),
+    fontFamily: "Roboto",
     h1: {
       fontSize: "48.83px",
     },
@@ -43,10 +76,10 @@ const theme = createMuiTheme({
       fontSize: "16px",
     },
     bodyXSmall: {
-      fontSize: "12.80px",
+      fontSize: "13px",
     },
     bodyXXSmall: {
-      fontSize: "10.20px",
+      fontSize: "10px",
     },
   },
 });

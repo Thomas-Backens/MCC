@@ -1,14 +1,16 @@
 import React from "react";
-import "../styles/App.css";
+import "../styles/index.css";
+import theme from "../styles/theme";
+import { ThemeProvider } from "@material-ui/core/styles";
 import Homepage from "../components/Homepage";
 import Topbar from "../components/Topbar";
 
 const App = () => {
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
       <Topbar />
       <Homepage />
-    </div>
+    </ThemeProvider>
   );
 };
 
