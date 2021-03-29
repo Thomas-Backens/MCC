@@ -2,8 +2,15 @@ import { makeStyles, Theme } from "@material-ui/core";
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.secondary.main,
+    width: "100%",
+  },
+  search: {
+    width: "70%",
+    height: 40,
+    marginBottom: theme.spacing(4),
+  },
+  hymns: {
+    width: "70%",
   },
 }));
 
