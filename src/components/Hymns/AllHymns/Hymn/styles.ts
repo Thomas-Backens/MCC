@@ -54,7 +54,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 40,
     "& > *": {
       fontSize: theme.typography.h6.fontSize,
-      fontWeight: 300,
+      fontWeight: 400,
+    },
+    "&:hover": {
+      backgroundColor: theme.palette.surface.lightGrey,
     },
   },
 }));

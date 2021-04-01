@@ -5,7 +5,7 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import Hymns from "../components/Hymns";
 import Topbar from "../components/Topbar";
 
-const App = (): ReactElement => {
+const App: React.FC = (): ReactElement => {
   return (
     <ThemeProvider theme={theme}>
       <Topbar />
