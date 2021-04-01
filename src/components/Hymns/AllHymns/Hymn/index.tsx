@@ -2,12 +2,14 @@ import React, { ReactElement } from "react";
 import { Box, Typography, IconButton, Button } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
 import useStyles from "./styles";
+import moment from "moment";
 
 interface HymnProps {
   name: string;
   number: number;
   logs: { logged: string; by: string }[];
   handleEdit: () => void;
+  handleQuickAdd: () => void;
 }
 
 const Hymn: React.FC<HymnProps> = ({
@@ -15,9 +17,13 @@ const Hymn: React.FC<HymnProps> = ({
   number,
   logs,
   handleEdit,
+  handleQuickAdd,
 }: HymnProps): ReactElement => {
   const s = useStyles();
-  const canSing = Math.round(Math.random() * 1);
+
+  const canSing = moment().isAfter(
+    moment(logs[logs.length - 1].logged).add(2, "weeks")
+  );
 
   return (
     <Box
@@ -48,7 +54,7 @@ const Hymn: React.FC<HymnProps> = ({
         justifyContent="flex-end"
         style={{ width: "15%" }}
       >
-        <IconButton className={s.quickAdd}>
+        <IconButton className={s.quickAdd} onClick={handleQuickAdd}>
           <AddIcon className={s.quickAddPlus} />
         </IconButton>
         <Button className={s.editButton} onClick={handleEdit}>
