@@ -3,10 +3,16 @@ import { Box } from "@material-ui/core";
 import Hymn from "./Hymn";
 import hymnsList from "./hymnsList";
 import EditModal from "./Hymn/Edit";
+import QuickAddModal from "./Hymn/QuickAdd";
 
-interface Values {
+interface EditValues {
   name: string;
   number: number;
+}
+
+interface QuickAddValues {
+  name: string;
+  date: string;
 }
 
 interface HymnValues {
@@ -22,19 +28,32 @@ const AllHymns = (): ReactElement => {
     logs: [{ logged: "", by: "" }],
   });
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [quickAddModalOpen, setQuickAddModalOpen] = useState<boolean>(false);
 
   const openEditModal = (values: HymnValues) => {
     setEditModalOpen(true);
     setData(values);
   };
+  const openQuickAddModal = (values: HymnValues) => {
+    setQuickAddModalOpen(true);
+    setData(values);
+  };
 
-  const editHymn = (values: Values) => {
+  const editHymn = (values: EditValues) => {
     const selectedhymn = hymnsList.filter(
       (hymn) => hymn.number === data.number
     );
 
     selectedhymn[0].name = values.name;
     selectedhymn[0].number = values.number;
+  };
+
+  const quickAddHymn = (values: QuickAddValues) => {
+    const selectedhymn = hymnsList.filter(
+      (hymn) => hymn.number === data.number
+    );
+
+    selectedhymn[0].logs.push({ logged: values.date, by: values.name });
   };
 
   return (
@@ -45,6 +64,11 @@ const AllHymns = (): ReactElement => {
         data={data}
         editMutation={editHymn}
       />
+      <QuickAddModal
+        open={quickAddModalOpen}
+        handleClose={() => setQuickAddModalOpen(false)}
+        quickAddMutation={quickAddHymn}
+      />
       <Box display="flex" justifyContent="center" flexDirection="column">
         {hymnsList.map((hymn) => (
           <Hymn
@@ -52,6 +76,7 @@ const AllHymns = (): ReactElement => {
             number={hymn.number}
             logs={hymn.logs}
             handleEdit={() => openEditModal(hymn)}
+            handleQuickAdd={() => openQuickAddModal(hymn)}
             key={hymn.number}
           />
         ))}
