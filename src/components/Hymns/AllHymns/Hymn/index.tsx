@@ -7,12 +7,14 @@ interface HymnProps {
   name: string;
   number: number;
   logs: { logged: string; by: string }[];
+  handleEdit: () => void;
 }
 
 const Hymn: React.FC<HymnProps> = ({
   name,
   number,
   logs,
+  handleEdit,
 }: HymnProps): ReactElement => {
   const s = useStyles();
   const canSing = Math.round(Math.random() * 1);
@@ -49,7 +51,9 @@ const Hymn: React.FC<HymnProps> = ({
         <IconButton className={s.quickAdd}>
           <AddIcon className={s.quickAddPlus} />
         </IconButton>
-        <Button className={s.editButton}>EDIT</Button>
+        <Button className={s.editButton} onClick={handleEdit}>
+          EDIT
+        </Button>
       </Box>
     </Box>
   );
