@@ -16,6 +16,8 @@ interface Values {
 const Hymns = (): ReactElement => {
   const s = useStyles();
 
+  const [searchBarValue, setSearchBarValue] = useState<string>("");
+
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
 
   const closeAddModal = () => {
@@ -42,7 +44,10 @@ const Hymns = (): ReactElement => {
       className={s.root}
     >
       <Box display="flex" alignItems="center" className={s.search}>
-        <SearchBar />
+        <SearchBar
+          value={searchBarValue}
+          handleChange={(value) => setSearchBarValue(value)}
+        />
         <AddHymn
           open={addModalOpen}
           handleClose={closeAddModal}
@@ -51,7 +56,7 @@ const Hymns = (): ReactElement => {
         />
       </Box>
       <Box className={s.hymns}>
-        <AllHymns />
+        <AllHymns filter={searchBarValue} />
       </Box>
     </Box>
   );
