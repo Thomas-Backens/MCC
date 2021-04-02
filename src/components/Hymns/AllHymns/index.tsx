@@ -21,7 +21,13 @@ interface HymnValues {
   logs: { logged: string; by: string }[];
 }
 
-const AllHymns = (): ReactElement => {
+interface AllHymnsProps {
+  filter: string;
+}
+
+const AllHymns: React.FC<AllHymnsProps> = ({
+  filter,
+}: AllHymnsProps): ReactElement => {
   const [data, setData] = useState<HymnValues>({
     name: "",
     number: 0,
@@ -56,6 +62,25 @@ const AllHymns = (): ReactElement => {
     selectedhymn[0].logs.push({ logged: values.date, by: values.name });
   };
 
+  const filteredHymns = hymnsList.filter(
+    (hymn) =>
+      hymn.name.toLowerCase().includes(filter.toLowerCase()) ||
+      hymn.number.toString().includes(filter)
+  );
+
+  const sortedHymns = filteredHymns.sort(function (
+    a: HymnValues,
+    b: HymnValues
+  ) {
+    if (a.name < b.name) {
+      return -1;
+    }
+    if (a.name > b.name) {
+      return 1;
+    }
+    return 0;
+  });
+
   return (
     <>
       <EditModal
@@ -70,7 +95,7 @@ const AllHymns = (): ReactElement => {
         quickAddMutation={quickAddHymn}
       />
       <Box display="flex" justifyContent="center" flexDirection="column">
-        {hymnsList.map((hymn) => (
+        {sortedHymns.map((hymn) => (
           <Hymn
             name={hymn.name}
             number={hymn.number}
