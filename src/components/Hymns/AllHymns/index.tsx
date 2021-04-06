@@ -68,19 +68,6 @@ const AllHymns: React.FC<AllHymnsProps> = ({
       hymn.number.toString().includes(filter)
   );
 
-  const sortedHymns = filteredHymns.sort(function (
-    a: HymnValues,
-    b: HymnValues
-  ) {
-    if (a.name < b.name) {
-      return -1;
-    }
-    if (a.name > b.name) {
-      return 1;
-    }
-    return 0;
-  });
-
   return (
     <>
       <EditModal
@@ -95,7 +82,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
         quickAddMutation={quickAddHymn}
       />
       <Box display="flex" justifyContent="center" flexDirection="column">
-        {sortedHymns.map((hymn) => (
+        {filteredHymns.sort().map((hymn) => (
           <Hymn
             name={hymn.name}
             number={hymn.number}
