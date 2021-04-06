@@ -6,7 +6,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 70,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
-    marginBottom: theme.spacing(2),
   },
   title: {
     color: theme.palette.surface.white,
@@ -59,6 +58,34 @@ const useStyles = makeStyles((theme: Theme) => ({
     "&:hover": {
       backgroundColor: theme.palette.surface.lightGrey,
     },
+  },
+  logsButton: {
+    width: 40,
+    height: 40,
+  },
+  arrow: {
+    width: 15,
+    height: 15,
+    color: "white",
+    transition: "0.2s",
+  },
+  rotated: {
+    transform: "rotate(90deg)",
+  },
+  logs: {
+    backgroundColor: theme.palette.surface.black,
+    marginBottom: theme.spacing(2),
+    overflow: "hidden",
+  },
+  log: {
+    color: theme.palette.surface.white,
+    fontSize: theme.typography.body1.fontSize,
+    fontWeight: 200,
+    marginLeft: theme.spacing(5),
+    marginBottom: theme.spacing(2),
+  },
+  closed: {
+    height: 0,
   },
 }));
 
