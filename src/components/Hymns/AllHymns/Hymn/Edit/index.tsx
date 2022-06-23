@@ -20,7 +20,7 @@ interface Values {
 interface HymnValues {
   name: string;
   number: number;
-  logs: { logged: string; by: string }[];
+  // logs: { logged: string; bywho: string }[];
 }
 
 interface EditModalProps {
