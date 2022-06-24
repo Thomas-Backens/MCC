@@ -4,11 +4,12 @@ import AddIcon from "@material-ui/icons/Add";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import useStyles from "./styles";
 import moment from "moment";
+import { v4 as uuidv4 } from "uuid";
 
 interface HymnProps {
   name: string;
   number: number;
-  logs: { logged: string; by: string }[];
+  logs: { logged: string; bywho: string }[];
   handleEdit: () => void;
   handleQuickAdd: () => void;
 }
@@ -24,13 +25,18 @@ const Hymn: React.FC<HymnProps> = ({
 
   const [logsOpen, setLogsOpen] = useState<boolean>(false);
 
-  const canSing = moment().isAfter(
-    moment(logs[logs.length - 1].logged).add(2, "weeks")
+  let canSing = false;
+  const soonLogs = logs.filter((log) =>
+    moment().isBefore(moment(log.logged, "MM/DD/YY").add(2, "weeks"))
   );
+  if (soonLogs.length <= 0) {
+    canSing = true;
+  }
 
   const Moment = require("moment");
   const sortedLogs = logs.sort(
-    (a, b) => new Moment(b.logged) - new Moment(a.logged)
+    (a, b) =>
+      new Moment(b.logged, "MM/DD/YY") - new Moment(a.logged, "MM/DD/YY")
   );
 
   return (
@@ -58,7 +64,7 @@ const Hymn: React.FC<HymnProps> = ({
         </Box>
         <Box style={{ width: "20%" }}>
           <Typography className={s.lastSang}>
-            {`Last sang: ${logs[logs.length - 1].logged}`}
+            {`Last sang: ${logs[0].logged}`}
           </Typography>
         </Box>
         <Box style={{ width: "25%" }}>
@@ -82,14 +88,14 @@ const Hymn: React.FC<HymnProps> = ({
       </Box>
       <Box className={`${s.logs} ${logsOpen ? "" : s.closed}`}>
         {sortedLogs.map((log) => (
-          <Box display="flex" alignItems="center">
+          <Box display="flex" alignItems="center" key={uuidv4()}>
             <Box width={300}>
               <Typography
                 className={s.log}
               >{`Logged: ${log.logged}`}</Typography>
             </Box>
             <Box>
-              <Typography className={s.log}>{`By: ${log.by}`}</Typography>
+              <Typography className={s.log}>{`By: ${log.bywho}`}</Typography>
             </Box>
           </Box>
         ))}
