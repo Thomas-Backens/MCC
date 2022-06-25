@@ -8,6 +8,10 @@ const useStyles = makeStyles((theme: Theme) => ({
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.surface.white,
     width: 130,
+    [theme.breakpoints.down("md")]: {
+      width: 30,
+      marginLeft: theme.spacing(-2),
+    },
     height: "100%",
     borderRadius: 0,
     fontSize: theme.typography.h6.fontSize,
