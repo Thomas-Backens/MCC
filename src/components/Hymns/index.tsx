@@ -109,7 +109,7 @@ const Hymns = (): ReactElement => {
       display="flex"
       alignItems="center"
       flexDirection="column"
-      marginTop={20}
+      // marginTop={20}
       className={s.root}
     >
       <Box display="flex" alignItems="center" className={s.search}>

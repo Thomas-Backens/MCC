@@ -6,30 +6,49 @@ const useStyles = makeStyles((theme: Theme) => ({
     height: 70,
     paddingLeft: theme.spacing(2),
     paddingRight: theme.spacing(2),
+    [theme.breakpoints.down("md")]: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
   },
   title: {
     color: theme.palette.surface.white,
     fontSize: theme.typography.h6.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
   },
   number: {
     color: theme.palette.surface.white,
     fontSize: theme.typography.h6.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
     textAlign: "center",
   },
   lastSang: {
     color: theme.palette.surface.white,
     fontSize: theme.typography.body1.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
     fontWeight: 200,
     textAlign: "center",
   },
   canSing: {
     color: theme.palette.primary.main,
     fontSize: theme.typography.h6.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
     textAlign: "center",
   },
   cantSing: {
     color: theme.palette.secondary.main,
     fontSize: theme.typography.h6.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
     textAlign: "center",
   },
   quickAdd: {
@@ -37,6 +56,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: 30,
     height: 30,
     marginRight: theme.spacing(2),
+    [theme.breakpoints.down("md")]: {
+      marginRight: theme.spacing(1),
+    },
     "&:hover": {
       backgroundColor: "rgba(58, 208, 118, 0.8)",
     },
@@ -50,10 +72,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 0,
     border: "1px solid #6A6A6A",
     width: 100,
-    height: 40,
+    [theme.breakpoints.down("md")]: {
+      width: 30,
+    },
+    height: 30,
     "& > *": {
       fontSize: theme.typography.h6.fontSize,
       fontWeight: 400,
+      [theme.breakpoints.down("md")]: {
+        fontSize: theme.typography.bodyXSmall.fontSize,
+      },
     },
     "&:hover": {
       backgroundColor: theme.palette.surface.lightGrey,
@@ -75,6 +103,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   logs: {
     backgroundColor: theme.palette.surface.black,
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down("md")]: {
+      marginBottom: theme.spacing(1),
+    },
     overflow: "hidden",
   },
   log: {
@@ -86,6 +117,27 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   closed: {
     height: 0,
+  },
+  boxW10: {
+    width: "10%",
+    [theme.breakpoints.down("md")]: {
+      width: "5%",
+    },
+  },
+  boxW15: {
+    width: "15%",
+    [theme.breakpoints.down("md")]: {
+      width: "35%",
+    },
+  },
+  boxW20: {
+    width: "20%",
+  },
+  boxW25: {
+    width: "25%",
+    [theme.breakpoints.down("md")]: {
+      width: "5%",
+    },
   },
 }));
 

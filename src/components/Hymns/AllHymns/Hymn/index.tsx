@@ -59,15 +59,15 @@ const Hymn: React.FC<HymnProps> = ({
             />
           </IconButton>
         </Box>
-        <Box style={{ width: "10%" }}>
+        <Box className={s.boxW10}>
           <Typography className={s.number}>{number}</Typography>
         </Box>
-        <Box style={{ width: "20%" }}>
+        <Box className={s.boxW20}>
           <Typography className={s.lastSang}>
             {`Last sang: ${logs[0].logged}`}
           </Typography>
         </Box>
-        <Box style={{ width: "25%" }}>
+        <Box className={s.boxW25}>
           <Typography className={canSing ? s.canSing : s.cantSing}>
             {canSing ? "It's been awhile!" : "Sang recently"}
           </Typography>
@@ -76,7 +76,7 @@ const Hymn: React.FC<HymnProps> = ({
           display="flex"
           alignItems="center"
           justifyContent="flex-end"
-          style={{ width: "15%" }}
+          className={s.boxW15}
         >
           <IconButton className={s.quickAdd} onClick={handleQuickAdd}>
             <AddIcon className={s.quickAddPlus} />
