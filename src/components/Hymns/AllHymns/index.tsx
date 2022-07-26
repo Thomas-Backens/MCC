@@ -9,6 +9,7 @@ import { Box } from "@material-ui/core";
 import Hymn from "./Hymn";
 // import { hymnsList, logsList } from "./hymnsList";
 import EditModal from "./Hymn/Edit";
+import PinModal from "./Hymn/Pin";
 import QuickAddModal from "./Hymn/QuickAdd";
 import { mutate } from "swr"; // useSWR
 import fetcher from "../../../Utils/fetcher";
@@ -17,6 +18,10 @@ import fetcher from "../../../Utils/fetcher";
 interface EditValues {
   name: string;
   number: number;
+}
+
+interface PasswordValues {
+  password: string;
 }
 
 interface QuickAddValues {
@@ -63,7 +68,10 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     // logs: [{ logged: "", bywho: "" }],
   });
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
+  const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
   const [quickAddModalOpen, setQuickAddModalOpen] = useState<boolean>(false);
+
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState<boolean>(false);
 
   // const { data: hymns } = useSWR("/api/hymn");
   // const { data: logs } = useSWR("/api/log");
@@ -116,10 +124,12 @@ const AllHymns: React.FC<AllHymnsProps> = ({
 
   const openEditModal = (values: HymnValues) => {
     setEditModalOpen(true);
+    setPinModalOpen(true);
     setData(values);
   };
   const openQuickAddModal = (values: HymnValues) => {
     setQuickAddModalOpen(true);
+    setPinModalOpen(true);
     setData(values);
   };
 
@@ -167,6 +177,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
       setLogs([...logData.filter((log) => log.id !== data.number)]);
     });
     setEditModalOpen(false);
+    setIsPasswordCorrect(false);
   };
 
   const quickAddHymn = (values: QuickAddValues) => {
@@ -183,6 +194,8 @@ const AllHymns: React.FC<AllHymnsProps> = ({
 
       setLogs([...logData, addedLog]);
     });
+    setQuickAddModalOpen(false);
+    setIsPasswordCorrect(false);
     // window.location.reload();
 
     // const selectedhymn = hymnsList.filter(
@@ -244,17 +257,38 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     return flogs;
   };
 
+  const checkPassword = (values: PasswordValues) => {
+    setIsPasswordCorrect(values.password === "rahab" ? true : false);
+    setPinModalOpen(false);
+  };
+
+  const closeEdit = () => {
+    setPinModalOpen(false);
+    setEditModalOpen(false);
+    setIsPasswordCorrect(false);
+  };
+  const closeQuickAdd = () => {
+    setPinModalOpen(false);
+    setQuickAddModalOpen(false);
+    setIsPasswordCorrect(false);
+  };
+
   return (
     <>
       <EditModal
-        open={editModalOpen}
-        handleClose={() => setEditModalOpen(false)}
+        open={editModalOpen && isPasswordCorrect}
+        handleClose={closeEdit}
         data={data}
         editMutation={editHymn}
       />
+      <PinModal
+        open={pinModalOpen}
+        handleClose={() => setPinModalOpen(false)}
+        isCorrect={(values) => checkPassword(values)}
+      />
       <QuickAddModal
-        open={quickAddModalOpen}
-        handleClose={() => setQuickAddModalOpen(false)}
+        open={quickAddModalOpen && isPasswordCorrect}
+        handleClose={closeQuickAdd}
         quickAddMutation={quickAddHymn}
       />
       <Box display="flex" justifyContent="center" flexDirection="column">
