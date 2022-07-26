@@ -7,12 +7,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import { SWRConfig } from "swr";
 import theme from "../styles/theme";
 import fetcher from "../Utils/fetcher";
-// import fetch from "isomorphic-fetch";
 
 export default function MyApp(props) {
   const { Component, pageProps } = props;
-
-  // const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.

@@ -60,13 +60,6 @@ const editHymn = async (number, newNumber, newName) => {
       RETURNING *`
     );
     result = rows;
-    // result = [
-    //   {
-    //     name: rows[0].name,
-    //     number: rows[0].number,
-    //     logs: logRows,
-    //   },
-    // ];
   } catch (err) {
     console.log(err.stack);
   }
