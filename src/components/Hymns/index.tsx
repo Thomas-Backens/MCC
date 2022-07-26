@@ -2,6 +2,7 @@ import React, { useState, ReactElement } from "react";
 import { Box } from "@material-ui/core";
 import SearchBar from "./Search/SearchBar";
 import AddHymn from "./Search/AddHymn";
+import PinModal from "./AllHymns/Hymn/Pin";
 import AllHymns from "./AllHymns";
 import { hymnsList, logsList } from "./AllHymns/hymnsList";
 import useStyles from "./styles";
@@ -13,6 +14,10 @@ interface Values {
   hymn_name: string;
   hymn_number: number;
   date: string;
+}
+
+interface PasswordValues {
+  password: string;
 }
 
 interface HymnValues {
@@ -42,10 +47,9 @@ const Hymns = (): ReactElement => {
   const [searchBarValue, setSearchBarValue] = useState<string>("");
 
   const [addModalOpen, setAddModalOpen] = useState<boolean>(false);
+  const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
 
-  const closeAddModal = () => {
-    setAddModalOpen(false);
-  };
+  const [isPasswordCorrect, setIsPasswordCorrect] = useState<boolean>(false);
 
   // const createHymn = (values: Values) => {
   //   const { name, hymn_name, hymn_number, date } = values;
@@ -74,6 +78,22 @@ const Hymns = (): ReactElement => {
   //     newHymn = addedHymn;
   //   });
   // };
+
+  const checkPassword = (values: PasswordValues) => {
+    setIsPasswordCorrect(values.password === "rahab" ? true : false);
+    setPinModalOpen(false);
+  };
+
+  const openAddModal = () => {
+    setAddModalOpen(true);
+    setPinModalOpen(true);
+  };
+
+  const closeAddModal = () => {
+    setPinModalOpen(false);
+    setAddModalOpen(false);
+    setIsPasswordCorrect(false);
+  };
 
   const addHymn = (values: Values) => {
     mutate("/api/hymn", async () => {
@@ -105,35 +125,42 @@ const Hymns = (): ReactElement => {
   };
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      flexDirection="column"
-      // marginTop={20}
-      className={s.root}
-    >
-      <Box display="flex" alignItems="center" className={s.search}>
-        <SearchBar
-          value={searchBarValue}
-          handleChange={(value) => setSearchBarValue(value)}
-        />
-        <AddHymn
-          open={addModalOpen}
-          handleClose={closeAddModal}
-          handleOpen={() => setAddModalOpen(true)}
-          createMutation={addHymn}
-        />
+    <>
+      <PinModal
+        open={pinModalOpen}
+        handleClose={() => setPinModalOpen(false)}
+        isCorrect={(values) => checkPassword(values)}
+      />
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection="column"
+        // marginTop={20}
+        className={s.root}
+      >
+        <Box display="flex" alignItems="center" className={s.search}>
+          <SearchBar
+            value={searchBarValue}
+            handleChange={(value) => setSearchBarValue(value)}
+          />
+          <AddHymn
+            open={addModalOpen && isPasswordCorrect}
+            handleClose={closeAddModal}
+            handleOpen={openAddModal}
+            createMutation={addHymn}
+          />
+        </Box>
+        <Box className={s.hymns}>
+          <AllHymns
+            filter={searchBarValue}
+            hymnData={allHymns}
+            logData={allLogs}
+            setHymns={setAllHymns}
+            setLogs={setAllLogs}
+          />
+        </Box>
       </Box>
-      <Box className={s.hymns}>
-        <AllHymns
-          filter={searchBarValue}
-          hymnData={allHymns}
-          logData={allLogs}
-          setHymns={setAllHymns}
-          setLogs={setAllLogs}
-        />
-      </Box>
-    </Box>
+    </>
   );
 };
 
