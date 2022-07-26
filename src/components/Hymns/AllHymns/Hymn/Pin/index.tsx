@@ -16,24 +16,15 @@ interface Values {
   password: string;
 }
 
-// interface HymnValues {
-//   name: string;
-//   number: number;
-// }
-
 interface EditModalProps {
   open: boolean;
   handleClose: () => void;
-  //  data: HymnValues;
-  //  editMutation: (values: Values) => void;
   isCorrect: (values: Values) => void;
 }
 
 const PinModal: React.FC<EditModalProps> = ({
   open,
   handleClose,
-  //   data,
-  //   editMutation,
   isCorrect,
 }: EditModalProps): ReactElement => {
   const s = useStyles();

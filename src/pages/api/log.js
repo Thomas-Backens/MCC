@@ -7,7 +7,6 @@ export default async (req, res) => {
       try {
         const logs = await sqlQuery.getAllLogs();
         res.status(200).json({ logs });
-        // return hymns;
         break;
       } catch (err) {
         return res.status(500).json({ message: err.message });

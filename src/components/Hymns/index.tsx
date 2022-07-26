@@ -34,13 +34,6 @@ interface LogValues {
 const Hymns = (): ReactElement => {
   const s = useStyles();
 
-  // const [newHymnValues, setNewHymnValues] = useState<Values>({
-  //   name: "",
-  //   hymn_name: "",
-  //   hymn_number: 0,
-  //   date: "",
-  // });
-
   const [allHymns, setAllHymns] = useState<HymnValues[]>(hymnsList);
   const [allLogs, setAllLogs] = useState<LogValues[]>(logsList);
 
@@ -50,34 +43,6 @@ const Hymns = (): ReactElement => {
   const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
 
   const [isPasswordCorrect, setIsPasswordCorrect] = useState<boolean>(false);
-
-  // const createHymn = (values: Values) => {
-  //   const { name, hymn_name, hymn_number, date } = values;
-  //   const newHymn = {
-  //     name: hymn_name,
-  //     number: hymn_number,
-  //     logs: [{ logged: date, by: name }],
-  //   };
-
-  //   hymnsList.push(newHymn);
-  // };
-
-  // const addHymn = (values: Values) => {
-  //   mutate("/api/hymn", async () => {
-  //     const addedHymn = await fetcher("/api/hymn", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({
-  //         bywho: values.name,
-  //         name: values.hymn_name,
-  //         number: values.hymn_number,
-  //         logged: values.date,
-  //       }),
-  //     });
-
-  //     newHymn = addedHymn;
-  //   });
-  // };
 
   const checkPassword = (values: PasswordValues) => {
     setIsPasswordCorrect(values.password === "rahab" ? true : false);
@@ -135,7 +100,6 @@ const Hymns = (): ReactElement => {
         display="flex"
         alignItems="center"
         flexDirection="column"
-        // marginTop={20}
         className={s.root}
       >
         <Box display="flex" alignItems="center" className={s.search}>
