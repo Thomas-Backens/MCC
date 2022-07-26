@@ -108,10 +108,19 @@ const useStyles = makeStyles((theme: Theme) => ({
     },
     overflow: "hidden",
   },
+  logSize: {
+    width: 300,
+    [theme.breakpoints.down("md")]: {
+      width: 150,
+    },
+  },
   log: {
     color: theme.palette.surface.white,
     fontSize: theme.typography.body1.fontSize,
     fontWeight: 200,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
     marginLeft: theme.spacing(5),
     marginBottom: theme.spacing(2),
   },

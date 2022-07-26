@@ -89,7 +89,7 @@ const Hymn: React.FC<HymnProps> = ({
       <Box className={`${s.logs} ${logsOpen ? "" : s.closed}`}>
         {sortedLogs.map((log) => (
           <Box display="flex" alignItems="center" key={uuidv4()}>
-            <Box width={300}>
+            <Box className={s.logSize}>
               <Typography
                 className={s.log}
               >{`Logged: ${log.logged}`}</Typography>
