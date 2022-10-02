@@ -12,6 +12,7 @@ import PinModal from "./Hymn/Pin";
 import QuickAddModal from "./Hymn/QuickAdd";
 import { mutate } from "swr";
 import fetcher from "../../../Utils/fetcher";
+import moment from "moment";
 
 interface EditValues {
   name: string;
@@ -44,6 +45,7 @@ interface AllHymnsProps {
   logData: LogValues[];
   setHymns: Dispatch<SetStateAction<HymnValues[]>>;
   setLogs: Dispatch<SetStateAction<LogValues[]>>;
+  sortedReversed: boolean;
 }
 
 const AllHymns: React.FC<AllHymnsProps> = ({
@@ -52,6 +54,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
   logData,
   setHymns,
   setLogs,
+  sortedReversed,
 }: AllHymnsProps): ReactElement => {
   const [data, setData] = useState<HymnValues>({
     name: "",
@@ -152,17 +155,64 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     );
   }
 
-  const filteredHymns = hymnData.filter(
-    (hymn) =>
-      hymn.name.toLowerCase().includes(filter.toLowerCase()) ||
-      hymn.number.toString().includes(filter)
-  );
+  let filteredHymns = [];
 
   const filteredLogs = (hymnId: number) => {
     const flogs = logData.filter((log) => log.id === hymnId);
 
     return flogs;
   };
+
+  if (filter === "") {
+    const newestHymns = [] as unknown as {
+      number: number;
+      name: string;
+      log: LogValues;
+    }[];
+    // console.log(hymnData[0]);
+    // console.log(filteredLogs(372));
+    for (let i = 0; i < hymnData.length; i++) {
+      const lastDates = filteredLogs(hymnData[i].number);
+      lastDates.sort((a, b) => {
+        if (moment(a.logged) < moment(b.logged)) return 1;
+        if (moment(a.logged) > moment(b.logged)) return -1;
+        return 0;
+      });
+      newestHymns.push({
+        number: hymnData[i].number,
+        name: hymnData[i].name,
+        log: lastDates[0],
+      } as {
+        number: number;
+        name: string;
+        log: LogValues;
+      });
+    }
+
+    if (sortedReversed) {
+      newestHymns.sort((a, b) => {
+        if (moment(a.log.logged) < moment(b.log.logged)) return -1;
+        if (moment(a.log.logged) > moment(b.log.logged)) return 1;
+        return 0;
+      });
+    } else {
+      newestHymns.sort((a, b) => {
+        if (moment(a.log.logged) < moment(b.log.logged)) return 1;
+        if (moment(a.log.logged) > moment(b.log.logged)) return -1;
+        return 0;
+      });
+    }
+
+    console.log(newestHymns);
+
+    filteredHymns = newestHymns;
+  } else {
+    filteredHymns = hymnData.filter(
+      (hymn) =>
+        hymn.name.toLowerCase().includes(filter.toLowerCase()) ||
+        hymn.number.toString().includes(filter)
+    );
+  }
 
   const checkPassword = (values: PasswordValues) => {
     setIsPasswordCorrect(values.password === "rahab" ? true : false);
