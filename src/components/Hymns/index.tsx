@@ -1,5 +1,6 @@
 import React, { useState, ReactElement } from "react";
-import { Box } from "@material-ui/core";
+import { Box, Typography, IconButton, Button } from "@material-ui/core";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import SearchBar from "./Search/SearchBar";
 import AddHymn from "./Search/AddHymn";
 import PinModal from "./AllHymns/Hymn/Pin";
@@ -43,6 +44,8 @@ const Hymns = (): ReactElement => {
   const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
 
   const [isPasswordCorrect, setIsPasswordCorrect] = useState<boolean>(false);
+
+  const [isSortedReversed, setIsSortedReversed] = useState<boolean>(false);
 
   const checkPassword = (values: PasswordValues) => {
     setIsPasswordCorrect(values.password === "rahab" ? true : false);
@@ -115,12 +118,39 @@ const Hymns = (): ReactElement => {
           />
         </Box>
         <Box className={s.hymns}>
+          <Box display="flex" alignItems="center" className={s.sort}>
+            <Button
+              onClick={() => setIsSortedReversed(!isSortedReversed)}
+              className={s.sortBtn}
+            >
+              Sort by Logged
+              <ArrowForwardIosIcon
+                className={`${s.arrow} ${
+                  isSortedReversed ? s.rotated : s.notRotated
+                }`}
+                fontSize="small"
+              />
+            </Button>
+            {/* <Typography className={s.sortText}>Sort by Logged</Typography>
+            <IconButton
+              className={s.logsButton}
+              onClick={() => setIsSortedReversed(!isSortedReversed)}
+            >
+              <ArrowForwardIosIcon
+                className={`${s.arrow} ${
+                  isSortedReversed ? s.rotated : s.notRotated
+                }`}
+                fontSize="small"
+              />
+            </IconButton> */}
+          </Box>
           <AllHymns
             filter={searchBarValue}
             hymnData={allHymns}
             logData={allLogs}
             setHymns={setAllHymns}
             setLogs={setAllLogs}
+            sortedReversed={isSortedReversed}
           />
         </Box>
       </Box>
