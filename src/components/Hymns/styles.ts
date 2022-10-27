@@ -24,11 +24,17 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   sort: {
     paddingLeft: theme.spacing(2),
+    [theme.breakpoints.down("md")]: {
+      paddingLeft: theme.spacing(0),
+    },
     marginBottom: theme.spacing(1),
   },
   sortBtn: {
     color: theme.palette.surface.white,
     fontSize: theme.typography.h6.fontSize,
+    [theme.breakpoints.down("md")]: {
+      fontSize: theme.typography.bodyXXSmall.fontSize,
+    },
   },
   logsButton: {
     width: 40,
