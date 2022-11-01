@@ -14,9 +14,14 @@ export default async (req, res) => {
     case "POST":
       try {
         const { id, bywho, logged } = await req.body;
-        if (id && bywho && logged) {
-          const result = await sqlQuery.addLog(id, bywho, logged);
-          return res.json(result[0]);
+        if (id && logged) {
+          if (bywho) {
+            const result = await sqlQuery.addLog(id, bywho, logged);
+            return res.json(result[0]);
+          } else {
+            const result = await sqlQuery.addLog(id, "Anonymous", logged);
+            return res.json(result[0]);
+          }
         }
         throw new Error("id required");
       } catch (err) {

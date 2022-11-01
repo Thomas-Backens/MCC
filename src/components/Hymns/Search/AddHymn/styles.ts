@@ -49,6 +49,23 @@ const useStyles = makeStyles((theme: Theme) => ({
     "& > *": {
       color: theme.palette.surface.white,
     },
+    [theme.breakpoints.down("md")]: {
+      width: 300,
+    },
+  },
+  smallField: {
+    backgroundColor: theme.palette.surface.black,
+    color: theme.palette.surface.white,
+    width: 242,
+    padding: theme.spacing(1),
+    borderRadius: 0,
+    border: "none",
+    "& > *": {
+      color: theme.palette.surface.white,
+    },
+    [theme.breakpoints.down("md")]: {
+      width: 142,
+    },
   },
   title: {
     color: theme.palette.surface.white,

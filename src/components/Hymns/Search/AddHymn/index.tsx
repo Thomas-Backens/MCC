@@ -77,9 +77,6 @@ const AddHymn: React.FC<AddHymnProps> = ({
                     date: string;
                   }> = {};
 
-                  if (!values.name) {
-                    errors.name = "Your name is required";
-                  }
                   if (!values.hymn_name) {
                     errors.hymn_name = "Hymn Name is required";
                   }
@@ -126,16 +123,16 @@ const AddHymn: React.FC<AddHymnProps> = ({
                       marginTop={2}
                     >
                       <Field
-                        className={s.field}
-                        style={{ width: 242 }}
+                        className={s.smallField}
+                        // style={{ width: 242 }}
                         component={TextField}
                         placeholder="Hymn number"
                         type="number"
                         name="hymn_number"
                       />
                       <Field
-                        className={s.field}
-                        style={{ width: 242 }}
+                        className={s.smallField}
+                        // style={{ width: 242 }}
                         component={TextField}
                         placeholder="Date"
                         type="text"

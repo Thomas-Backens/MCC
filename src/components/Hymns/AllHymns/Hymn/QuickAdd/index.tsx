@@ -61,9 +61,6 @@ const QuickAddModal: React.FC<QuickAddModalProps> = ({
                   date: string;
                 }> = {};
 
-                if (!values.name) {
-                  errors.name = "Hymn Name is required";
-                }
                 if (!values.date) {
                   errors.date = "Date is required";
                 }

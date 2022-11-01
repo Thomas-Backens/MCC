@@ -14,9 +14,19 @@ export default async (req, res) => {
     case "POST":
       try {
         const { bywho, name, number, logged } = await req.body;
-        if (bywho && name && number && logged) {
-          const result = await sqlQuery.addHymn(bywho, name, number, logged);
-          return res.json(result[0]);
+        if (name && number && logged) {
+          if (bywho) {
+            const result = await sqlQuery.addHymn(bywho, name, number, logged);
+            return res.json(result[0]);
+          } else {
+            const result = await sqlQuery.addHymn(
+              "Anonymous",
+              name,
+              number,
+              logged
+            );
+            return res.json(result[0]);
+          }
         }
         throw new Error("number required");
       } catch (err) {
