@@ -10,6 +10,7 @@ import Hymn from "./Hymn";
 import EditModal from "./Hymn/Edit";
 import PinModal from "./Hymn/Pin";
 import QuickAddModal from "./Hymn/QuickAdd";
+import AlertDialog from "./Hymn/Alert";
 import { mutate } from "swr";
 import fetcher from "../../../Utils/fetcher";
 import moment from "moment";
@@ -63,6 +64,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
   const [quickAddModalOpen, setQuickAddModalOpen] = useState<boolean>(false);
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
   const [isPasswordCorrect, setIsPasswordCorrect] = useState<boolean>(false);
 
@@ -130,6 +132,10 @@ const AllHymns: React.FC<AllHymnsProps> = ({
           logged: values.date,
         }),
       });
+
+      if (addedLog.length <= 0) {
+        setAlertOpen(true);
+      }
 
       setLogs([...logData, addedLog]);
     });
@@ -203,8 +209,6 @@ const AllHymns: React.FC<AllHymnsProps> = ({
       });
     }
 
-    console.log(newestHymns);
-
     filteredHymns = newestHymns;
   } else {
     filteredHymns = hymnData.filter(
@@ -230,6 +234,10 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     setIsPasswordCorrect(false);
   };
 
+  const handleCloseAlert = () => {
+    setAlertOpen(false);
+  };
+
   return (
     <>
       <EditModal
@@ -248,6 +256,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
         handleClose={closeQuickAdd}
         quickAddMutation={quickAddHymn}
       />
+      <AlertDialog open={alertOpen} handleClose={handleCloseAlert} />
       <Box display="flex" justifyContent="center" flexDirection="column">
         {filteredHymns.sort().map((hymn) => (
           <Hymn

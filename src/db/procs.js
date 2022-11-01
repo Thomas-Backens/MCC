@@ -80,6 +80,14 @@ const getAllLogs = async () => {
 const addLog = async (id, bywho, logged) => {
   let result = {};
   try {
+    const check = await pool.query(
+      sql`
+      SELECT * from log WHERE id = ${id} AND logged = ${logged}
+      `
+    );
+    if (check.rows.length > 0) {
+      return;
+    }
     const { rows } = await pool.query(
       sql`
       INSERT INTO log (id, logged, bywho)

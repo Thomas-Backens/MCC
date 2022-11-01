@@ -33,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     "& > *": {
       color: theme.palette.surface.white,
     },
+    [theme.breakpoints.down("md")]: {
+      width: 300,
+    },
   },
   title: {
     color: theme.palette.surface.white,
