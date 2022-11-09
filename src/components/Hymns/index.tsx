@@ -11,10 +11,9 @@ import { mutate } from "swr";
 import fetcher from "../../Utils/fetcher";
 
 interface Values {
-  name: string;
   hymn_name: string;
   hymn_number: number;
-  date: string;
+  log: { logged: string; by: string };
 }
 
 interface PasswordValues {
@@ -22,21 +21,15 @@ interface PasswordValues {
 }
 
 interface HymnValues {
+  _id: number;
   name: string;
-  number: number;
-}
-
-interface LogValues {
-  id: number;
-  logged: string;
-  bywho: string;
+  logs: { logged: string; by: string }[];
 }
 
 const Hymns = (): ReactElement => {
   const s = useStyles();
 
   const [allHymns, setAllHymns] = useState<HymnValues[]>(hymnsList);
-  const [allLogs, setAllLogs] = useState<LogValues[]>(logsList);
 
   const [searchBarValue, setSearchBarValue] = useState<string>("");
 
@@ -69,24 +62,22 @@ const Hymns = (): ReactElement => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          bywho: values.name,
           name: values.hymn_name,
           number: values.hymn_number,
-          logged: values.date,
+          log: values.log,
         }),
       });
 
+      console.log(
+        `Inside the mutation, values.log: ${values.log}, addedHymn.log: ${addedHymn.log}`
+      );
+
       const newHymn = {
+        _id: addedHymn.number,
         name: addedHymn.name,
-        number: addedHymn.number,
+        logs: addedHymn.log,
       };
       setAllHymns([...allHymns, newHymn]);
-      const newLog = {
-        id: addedHymn.number,
-        logged: addedHymn.logged,
-        bywho: addedHymn.bywho,
-      };
-      setAllLogs([...allLogs, newLog]);
 
       window.location.reload();
     });
@@ -123,7 +114,7 @@ const Hymns = (): ReactElement => {
               onClick={() => setIsSortedReversed(!isSortedReversed)}
               className={s.sortBtn}
             >
-              Sort by Logged
+              Sort by Date
               <ArrowForwardIosIcon
                 className={`${s.arrow} ${
                   isSortedReversed ? s.rotated : s.notRotated
@@ -147,9 +138,7 @@ const Hymns = (): ReactElement => {
           <AllHymns
             filter={searchBarValue}
             hymnData={allHymns}
-            logData={allLogs}
             setHymns={setAllHymns}
-            setLogs={setAllLogs}
             sortedReversed={isSortedReversed}
           />
         </Box>

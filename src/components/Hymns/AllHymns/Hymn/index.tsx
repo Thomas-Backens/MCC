@@ -9,7 +9,7 @@ import { v4 as uuidv4 } from "uuid";
 interface HymnProps {
   name: string;
   number: number;
-  logs: { logged: string; bywho: string }[];
+  logs: { logged: string; by: string }[];
   handleEdit: () => void;
   handleQuickAdd: () => void;
 }
@@ -95,7 +95,7 @@ const Hymn: React.FC<HymnProps> = ({
               >{`Logged: ${log.logged}`}</Typography>
             </Box>
             <Box>
-              <Typography className={s.log}>{`By: ${log.bywho}`}</Typography>
+              <Typography className={s.log}>{`By: ${log.by}`}</Typography>
             </Box>
           </Box>
         ))}

@@ -14,10 +14,9 @@ import useStyles from "./styles";
 import moment from "moment";
 
 interface Values {
-  name: string;
   hymn_name: string;
   hymn_number: number;
-  date: string;
+  log: { logged: string; by: string };
 }
 
 interface AddHymnProps {
@@ -36,15 +35,13 @@ const AddHymn: React.FC<AddHymnProps> = ({
   const s = useStyles();
 
   const initialValues: {
-    name: string;
     hymn_name: string;
     hymn_number: number;
-    date: string;
+    log: { logged: string; by: string };
   } = {
-    name: "",
     hymn_name: "",
     hymn_number: 0,
-    date: moment().format("MM/DD/YY"),
+    log: { logged: moment().format("MM/DD/YY"), by: "" },
   };
 
   return (
@@ -71,10 +68,9 @@ const AddHymn: React.FC<AddHymnProps> = ({
                 initialValues={initialValues}
                 validate={(values) => {
                   const errors: Partial<{
-                    name: string;
                     hymn_name: string;
                     hymn_number: string;
-                    date: string;
+                    log: { logged: string; by: string };
                   }> = {};
 
                   if (!values.hymn_name) {
@@ -83,8 +79,11 @@ const AddHymn: React.FC<AddHymnProps> = ({
                   if (!values.hymn_number) {
                     errors.hymn_number = "Hymn Number is required";
                   }
-                  if (!values.date) {
-                    errors.date = "Date is required";
+                  if (!values.log) {
+                    errors.log = {
+                      logged: "Date is required",
+                      by: "Anonymous",
+                    };
                   }
                   return errors;
                 }}
@@ -104,7 +103,7 @@ const AddHymn: React.FC<AddHymnProps> = ({
                         component={TextField}
                         placeholder="Your name"
                         type="text"
-                        name="name"
+                        name="log.by"
                       />
                     </Box>
                     <Box marginTop={2}>
@@ -136,7 +135,7 @@ const AddHymn: React.FC<AddHymnProps> = ({
                         component={TextField}
                         placeholder="Date"
                         type="text"
-                        name="date"
+                        name="log.logged"
                       />
                     </Box>
                     <Box
