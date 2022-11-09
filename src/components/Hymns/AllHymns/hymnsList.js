@@ -1,15 +1,18 @@
 const hymnsList = [
   {
+    _id: 999,
     name: "HYMN",
-    number: 999,
+    logs: [{ logged: "01/01/01", by: "John Doe" }],
   },
   {
+    _id: 998,
     name: "HYMN",
-    number: 998,
+    logs: [{ logged: "01/01/01", by: "John Doe" }],
   },
   {
+    _id: 997,
     name: "HYMN",
-    number: 997,
+    logs: [{ logged: "01/01/01", by: "John Doe" }],
   },
 ];
 const logsList = [

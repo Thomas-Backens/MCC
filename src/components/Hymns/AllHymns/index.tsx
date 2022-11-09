@@ -30,36 +30,28 @@ interface QuickAddValues {
 }
 
 interface HymnValues {
+  _id: number;
   name: string;
-  number: number;
-}
-
-interface LogValues {
-  id: number;
-  logged: string;
-  bywho: string;
+  logs: { logged: string; by: string }[];
 }
 
 interface AllHymnsProps {
   filter: string;
   hymnData: HymnValues[];
-  logData: LogValues[];
   setHymns: Dispatch<SetStateAction<HymnValues[]>>;
-  setLogs: Dispatch<SetStateAction<LogValues[]>>;
   sortedReversed: boolean;
 }
 
 const AllHymns: React.FC<AllHymnsProps> = ({
   filter,
   hymnData,
-  logData,
   setHymns,
-  setLogs,
   sortedReversed,
 }: AllHymnsProps): ReactElement => {
   const [data, setData] = useState<HymnValues>({
+    _id: 0,
     name: "",
-    number: 0,
+    logs: [],
   });
   const [editModalOpen, setEditModalOpen] = useState<boolean>(false);
   const [pinModalOpen, setPinModalOpen] = useState<boolean>(false);
@@ -72,10 +64,7 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     fetch("/api/hymn")
       .then((response) => response.json())
       .then((hymn_data) => setHymns(hymn_data.hymns));
-    fetch("/api/log")
-      .then((response) => response.json())
-      .then((log_data) => setLogs(log_data.logs));
-  }, [setHymns, setLogs]);
+  }, [setHymns]);
 
   const openEditModal = (values: HymnValues) => {
     setEditModalOpen(true);
@@ -90,60 +79,45 @@ const AllHymns: React.FC<AllHymnsProps> = ({
 
   const editHymn = (values: EditValues) => {
     mutate("/api/hymn", async () => {
-      const editedHymn = await fetcher("/api/hymn", {
+      const updatedHymns = await fetcher("/api/hymn", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          number: data.number,
-          newNumber: values.number,
+          _id: data._id,
+          newId: values.number,
           newName: values.name,
         }),
       });
 
-      let newLogs = logData.filter((log) => log.id === data.number);
-
-      if (values.number === data.number) {
-        editedHymn.number = data.number;
-      } else {
-        newLogs.forEach((newLog) => {
-          newLog.id = values.number;
-        });
-      }
-
-      editedHymn.name = values.name;
-      setHymns([
-        ...hymnData.filter((hymn) => hymn.number !== data.number),
-        editedHymn,
-      ]);
-      setLogs([...logData.filter((log) => log.id !== data.number)]);
+      setHymns(updatedHymns);
     });
     setEditModalOpen(false);
     setIsPasswordCorrect(false);
   };
 
   const quickAddHymn = (values: QuickAddValues) => {
-    mutate("/api/log", async () => {
-      const addedLog = await fetcher("/api/log", {
-        method: "POST",
+    mutate("/api/hymn", async () => {
+      const updatedHymns = await fetcher("/api/hymn", {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          id: data.number,
-          bywho: values.name,
+          _id: data._id,
+          by: values.name,
           logged: values.date,
         }),
       });
 
-      if (addedLog.length <= 0) {
+      if (updatedHymns.length <= 0) {
         setAlertOpen(true);
+      } else {
+        setHymns(updatedHymns);
       }
-
-      setLogs([...logData, addedLog]);
     });
     setQuickAddModalOpen(false);
     setIsPasswordCorrect(false);
   };
 
-  if (hymnData[0].number === 999 || logData[0].id === 999) {
+  if (hymnData === undefined) {
     return (
       <>
         <EditModal
@@ -161,60 +135,44 @@ const AllHymns: React.FC<AllHymnsProps> = ({
     );
   }
 
-  let filteredHymns = [];
-
-  const filteredLogs = (hymnId: number) => {
-    const flogs = logData.filter((log) => log.id === hymnId);
-
-    return flogs;
-  };
+  let filteredHymns = hymnData;
 
   if (filter === "") {
-    const newestHymns = [] as unknown as {
-      number: number;
-      name: string;
-      log: LogValues;
-    }[];
-    // console.log(hymnData[0]);
-    // console.log(filteredLogs(372));
+    let sortedHymns = [];
     for (let i = 0; i < hymnData.length; i++) {
-      const lastDates = filteredLogs(hymnData[i].number);
-      lastDates.sort((a, b) => {
+      const sortedLogs = hymnData[i].logs.sort((a, b) => {
         if (moment(a.logged) < moment(b.logged)) return 1;
         if (moment(a.logged) > moment(b.logged)) return -1;
         return 0;
       });
-      newestHymns.push({
-        number: hymnData[i].number,
+
+      sortedHymns.push({
+        _id: hymnData[i]._id,
         name: hymnData[i].name,
-        log: lastDates[0],
-      } as {
-        number: number;
-        name: string;
-        log: LogValues;
+        logs: sortedLogs,
       });
     }
 
     if (sortedReversed) {
-      newestHymns.sort((a, b) => {
-        if (moment(a.log.logged) < moment(b.log.logged)) return -1;
-        if (moment(a.log.logged) > moment(b.log.logged)) return 1;
+      sortedHymns.sort((a, b) => {
+        if (moment(a.logs[0].logged) < moment(b.logs[0].logged)) return -1;
+        if (moment(a.logs[0].logged) > moment(b.logs[0].logged)) return 1;
         return 0;
       });
     } else {
-      newestHymns.sort((a, b) => {
-        if (moment(a.log.logged) < moment(b.log.logged)) return 1;
-        if (moment(a.log.logged) > moment(b.log.logged)) return -1;
+      sortedHymns.sort((a, b) => {
+        if (moment(a.logs[0].logged) < moment(b.logs[0].logged)) return 1;
+        if (moment(a.logs[0].logged) > moment(b.logs[0].logged)) return -1;
         return 0;
       });
     }
 
-    filteredHymns = newestHymns;
+    filteredHymns = sortedHymns;
   } else {
     filteredHymns = hymnData.filter(
       (hymn) =>
         hymn.name.toLowerCase().includes(filter.toLowerCase()) ||
-        hymn.number.toString().includes(filter)
+        hymn._id.toString().includes(filter)
     );
   }
 
@@ -261,11 +219,11 @@ const AllHymns: React.FC<AllHymnsProps> = ({
         {filteredHymns.sort().map((hymn) => (
           <Hymn
             name={hymn.name}
-            number={hymn.number}
-            logs={filteredLogs(hymn.number)}
+            number={hymn._id}
+            logs={hymn.logs}
             handleEdit={() => openEditModal(hymn)}
             handleQuickAdd={() => openQuickAddModal(hymn)}
-            key={hymn.number}
+            key={hymn._id}
           />
         ))}
       </Box>

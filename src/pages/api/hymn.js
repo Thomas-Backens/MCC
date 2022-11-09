@@ -1,11 +1,11 @@
 /* eslint-disable import/no-anonymous-default-export */
-const sqlQuery = require("../../db/procs");
+const mongoQuery = require("../../Utils/mongodb");
 
 export default async (req, res) => {
   switch (req.method) {
     case "GET":
       try {
-        const hymns = await sqlQuery.getAllHymns();
+        const hymns = await mongoQuery.getAllHymns();
         res.status(200).json({ hymns });
         break;
       } catch (err) {
@@ -13,18 +13,22 @@ export default async (req, res) => {
       }
     case "POST":
       try {
-        const { bywho, name, number, logged } = await req.body;
-        if (name && number && logged) {
-          if (bywho) {
-            const result = await sqlQuery.addHymn(bywho, name, number, logged);
+        const { name, number, log } = await req.body;
+        if (name && number) {
+          if (log.by) {
+            const result = await mongoQuery.addHymn({
+              _id: number,
+              name: name,
+              logs: [{ logged: log.logged, by: log.by }],
+            });
+            console.log(result);
             return res.json(result[0]);
           } else {
-            const result = await sqlQuery.addHymn(
-              "Anonymous",
-              name,
-              number,
-              logged
-            );
+            const result = await mongoQuery.addHymn({
+              _id: number,
+              name: name,
+              logs: [{ logged: log.logged, by: "Anonymous" }],
+            });
             return res.json(result[0]);
           }
         }
@@ -32,14 +36,42 @@ export default async (req, res) => {
       } catch (err) {
         return res.status(500).json({ message: err.message });
       }
+    case "PUT":
+      try {
+        const { _id, logged, by } = await req.body;
+        if (_id && logged) {
+          if (by) {
+            const result = await mongoQuery.addLog(_id, {
+              logs: [{ logged: logged, by: by }],
+            });
+
+            if (result === undefined) {
+              return res.json([]);
+            }
+            return res.json(result);
+          } else {
+            const result = await mongoQuery.addLog(_id, {
+              logs: [{ logged: logged, by: "Anonymous" }],
+            });
+
+            if (result === undefined) {
+              return res.json([]);
+            }
+            return res.json(result);
+          }
+        }
+        throw new Error("log required");
+      } catch (err) {
+        return res.status(500).json({ message: err.message });
+      }
     case "PATCH":
       try {
-        const { number, newNumber, newName } = await req.body;
-        if (number) {
-          const result = await sqlQuery.editHymn(number, newNumber, newName);
-          return res.json(result[0]);
+        const { _id, newId, newName } = await req.body;
+        if (_id) {
+          const result = await mongoQuery.editHymn(_id, newId, newName);
+          return res.json(result);
         }
-        throw new Error("number required");
+        throw new Error("Id required");
       } catch (err) {
         return res.status(500).json({ message: err.message });
       }

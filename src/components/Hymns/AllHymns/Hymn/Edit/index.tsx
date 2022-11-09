@@ -18,8 +18,8 @@ interface Values {
 }
 
 interface HymnValues {
+  _id: number;
   name: string;
-  number: number;
 }
 
 interface EditModalProps {
@@ -42,7 +42,7 @@ const EditModal: React.FC<EditModalProps> = ({
     number: number;
   } = {
     name: data.name,
-    number: data.number,
+    number: data._id,
   };
 
   return (
